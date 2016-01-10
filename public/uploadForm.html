@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Filemeta Data Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-18">
+                <h1>File Form</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-18">
+                <form method="POST" enctype="multipart/form-data" id="fileForm" action="/api/upload">
+                    <div class="form-group">
+                        <label for="userFile">File input</label>
+                        <input type="file" id="userFile" name="userFile">
+                        <p class="help-block">Upload a file and the file size will be sent as an alert.</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    $(function(){
+        // Got this from view-source:https://cryptic-ridge-9197.herokuapp.com/
+        $("#fileForm").on("submit", function(event) {
+
+            event.stopPropagation();
+            // Stops the default form event.
+            event.preventDefault();
+
+            var data = new FormData($("form")[0])
+//            data.append("userFile", $("#userFile")[0].files)
+
+            console.log(data)
+
+            $.ajax({
+                url: window.location.origin + "/api/upload",
+                type: "POST",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                error: function(xhr, textStatus, errorThrown) {
+                    alert('ERRORS: ' + textStatus);
+                },
+                success: function(data) {
+                    alert('FILE SIZE: ' + data.fileSize);
+                }
+            });
+        });
+    })
+</script>
+</body>
+</html>
