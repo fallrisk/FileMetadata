@@ -12,7 +12,7 @@ var storage = multer.diskStorage({
         cb(null, "./uploads")
     },
     filename: (req, file, cb) => {
-        console.log(file)
+        //console.log(file)
         cb(null, file.fieldname + "-" + Date.now())
     }
 })
@@ -21,6 +21,9 @@ var upload = multer({storage: storage}).single("userFile")
 var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'))
+
+// TODO JKW: Need to add a check to see how many files are in the directory "uploads"
+// before allowing the upload.
 
 // Routes
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,9 +49,6 @@ router.post("/api/upload", (req, res, next) => {
         if (err) {
             return res.end("Error uploading file.")
         }
-        // req.file is the "userFile"
-        console.log("got file")
-        console.log(req.file)
         var fileStats = fs.statSync(req.file.path)
         res.status(200).json({fileSize: fileStats.size})
     })

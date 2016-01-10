@@ -36,9 +36,8 @@
             event.preventDefault();
 
             var data = new FormData($("form")[0])
-//            data.append("userFile", $("#userFile")[0].files)
 
-            console.log(data)
+//            console.log(data)
 
             $.ajax({
                 url: window.location.origin + "/api/upload",
