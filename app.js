@@ -7,14 +7,14 @@ var Promise = RSVP.Promise
 var fs = require("fs")
 var marked = require("marked")
 var multer  = require('multer')
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./uploads")
-    },
-    filename: (req, file, cb) => {
-        //console.log(file)
-        cb(null, file.fieldname + "-" + Date.now())
-    }
+var storage = multer.memoryStorage({
+    //destination: (req, file, cb) => {
+    //    cb(null, "./uploads")
+    //},
+    //filename: (req, file, cb) => {
+    //    console.log(file)
+    //    cb(null, file.fieldname + "-" + Date.now())
+    //}
 })
 var upload = multer({storage: storage}).single("userFile")
 
@@ -49,8 +49,9 @@ router.post("/api/upload", (req, res, next) => {
         if (err) {
             return res.end("Error uploading file.")
         }
-        var fileStats = fs.statSync(req.file.path)
-        res.status(200).json({fileSize: fileStats.size})
+        //console.log(req.file.buffer.length)
+        //var fileStats = fs.statSync(req.file.path)
+        res.status(200).json({fileSize: req.file.buffer.length})
     })
 })
 
